@@ -1,4 +1,4 @@
-const { ChainId, Fetcher, WETH, Route } = require('@uniswap/sdk');
+const { ChainId, Fetcher, WETH, Route, Trade, TokenAmount, TradeType } = require('@uniswap/sdk');
 const ethers = require('ethers');
 
 const chainId = ChainId.MAINNET;
@@ -9,9 +9,10 @@ const init = async () => {
     const weth = WETH[chainId];
     const pair = await Fetcher.fetchPairData(dai, weth); //Création d'une nouvelle paire sur le market
     const route = new Route([pair], weth);
+    const trade = new Trade(route, new TokenAmount(weth, '100000000000000000'), TradeType.EXACT_INPUT);
 
-    console.log(route.midPrice.toSignificant(6));
-    console.log(route.midPrice.invert().toSignificant(6));
+    console.log(trade.executionPrice.toSignificant(6));
+    console.log(trade.nextMidPrice.toSignificant(6));
 }
 
 init();
